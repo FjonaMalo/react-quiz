@@ -5,10 +5,11 @@ import Main from "./components/Main";
 import { Loader } from "./components/Loader";
 import ErrorComponent from "./components/ErrorComponent";
 import StartScreen from "./components/StartScreen";
+import Question from "./components/Question";
 
 interface AppState {
   questions: any[];
-  status: "loading" | "ready" | "error";
+  status: "loading" | "ready" | "error" | "active";
 }
 
 interface DataReceivedAction {
@@ -19,8 +20,11 @@ interface DataReceivedAction {
 interface DataFailedAction {
   type: "dataFailed";
 }
+interface StartAction {
+  type: "start";
+}
 
-type Action = DataReceivedAction | DataFailedAction;
+type Action = DataReceivedAction | DataFailedAction | StartAction;
 
 const initialState: AppState = {
   questions: [],
@@ -33,6 +37,8 @@ const reducer = (state: AppState, action: Action): AppState => {
       return { ...state, questions: action.payload, status: "ready" };
     case "dataFailed":
       return { ...state, status: "error" };
+    case "start":
+      return { ...state, status: "active" };
     default:
       throw new Error("Action unknown");
   }
@@ -56,7 +62,10 @@ function App() {
       <Main>
         {status === "loading" && <Loader />}
         {status === "error" && <ErrorComponent />}
-        {status === "ready" && <StartScreen numQuestions={numQuestions} />}
+        {status === "ready" && (
+          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
+        {status === "active" && <Question />}
       </Main>
     </div>
   );
