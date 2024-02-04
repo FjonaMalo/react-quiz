@@ -10,6 +10,7 @@ import Question from "./components/Question";
 interface AppState {
   questions: any[];
   status: "loading" | "ready" | "error" | "active";
+  index: number;
 }
 
 interface DataReceivedAction {
@@ -29,6 +30,7 @@ type Action = DataReceivedAction | DataFailedAction | StartAction;
 const initialState: AppState = {
   questions: [],
   status: "loading",
+  index: 0,
 };
 
 const reducer = (state: AppState, action: Action): AppState => {
@@ -45,7 +47,10 @@ const reducer = (state: AppState, action: Action): AppState => {
 };
 
 function App() {
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   const numQuestions = questions.length;
 
@@ -65,7 +70,7 @@ function App() {
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Question />}
+        {status === "active" && <Question question={questions[index]} />}
       </Main>
     </div>
   );
