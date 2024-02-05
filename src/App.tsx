@@ -40,6 +40,9 @@ interface NextAnswerAction {
 interface FinishAction {
   type: "finish";
 }
+interface RestartAction {
+  type: "restart";
+}
 
 type Action =
   | DataReceivedAction
@@ -47,7 +50,8 @@ type Action =
   | StartAction
   | NewAnswerAction
   | NextAnswerAction
-  | FinishAction;
+  | FinishAction
+  | RestartAction;
 
 const initialState: AppState = {
   questions: [],
@@ -85,6 +89,8 @@ const reducer = (state: AppState, action: Action): AppState => {
         highscore:
           state.points > state.highscore ? state.points : state.highscore,
       };
+    case "restart":
+      return { ...initialState, questions: state.questions, status: "ready" };
     default:
       throw new Error("Action unknown");
   }
@@ -143,6 +149,7 @@ function App() {
             points={points}
             maxPossiblePoints={maxPossiblePoints}
             highscore={highscore}
+            dispatch={dispatch}
           />
         )}
       </Main>

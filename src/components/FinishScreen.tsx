@@ -1,13 +1,16 @@
+import { Dispatch } from "react";
+
 interface FinishScreenProps {
   points: number;
   maxPossiblePoints: number;
   highscore: number;
+  dispatch: Dispatch<any>;
 }
-
 const FinishScreen = ({
   points,
   maxPossiblePoints,
   highscore,
+  dispatch,
 }: FinishScreenProps) => {
   const percentage = (points / maxPossiblePoints) * 100;
 
@@ -25,6 +28,12 @@ const FinishScreen = ({
         {maxPossiblePoints} ({Math.ceil(percentage)}%)
       </p>
       <p className="highscore">(Highscore: {highscore} points)</p>
+      <button
+        className="btn btn-ui"
+        onClick={() => dispatch({ type: "restart" })}
+      >
+        Restart quiz
+      </button>
     </>
   );
 };
